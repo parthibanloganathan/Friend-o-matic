@@ -1,4 +1,4 @@
-package com.parthi.friendomatic;
+/*package com.parthi.friendomatic;
 
 import com.parthi.friendomatic.R;
 import android.os.Bundle;
@@ -17,4 +17,4 @@ public class SelectionFragment extends Fragment
 	    View view = inflater.inflate(R.layout.activity_selection, container, false);
 	    return view;
 	}
-}
+}*/

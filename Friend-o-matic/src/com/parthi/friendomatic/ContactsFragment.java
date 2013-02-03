@@ -1,4 +1,4 @@
-package com.parthi.friendomatic;
+/*package com.parthi.friendomatic;
 
 import java.util.ArrayList;
 
@@ -124,4 +124,4 @@ public class ContactsFragment extends Fragment
 		     Toast.makeText(getActivity(), "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 		 } 
 	}
-}
+}*/

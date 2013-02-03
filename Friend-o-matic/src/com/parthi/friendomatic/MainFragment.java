@@ -1,4 +1,4 @@
-/*package com.parthi.friendomatic;
+package com.parthi.friendomatic;
 
 import java.util.Arrays;
 
@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,14 +16,39 @@ import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.widget.*;
-import com.facebook.widget.WebDialog.*;
+import com.facebook.widget.LoginButton;
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.OnCompleteListener;
 
-
-public class FacebookFragment extends Fragment
+public class MainFragment extends Fragment
 {
+	private UiLifecycleHelper uiHelper;
+	
+	private Button sendRequestButton;
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
+	    View view = inflater.inflate(R.layout.activity_main, container, false);
 
-	private Session.StatusCallback callback = new Session.StatusCallback() 
+	    LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
+	    authButton.setReadPermissions(Arrays.asList("user_likes", "user_status"));
+	    authButton.setFragment(this);
+	    
+	    sendRequestButton = (Button) view.findViewById(R.id.sendRequestButton);
+	    sendRequestButton.setOnClickListener(new View.OnClickListener()
+	    {
+	        @Override
+	        public void onClick(View v)
+	        {
+	            sendRequestDialog();        
+	        }
+	    });
+	    
+	    return view;
+	}
+	
+	private Session.StatusCallback callback = new Session.StatusCallback()
 	{
 	    @Override
 	    public void call(Session session, SessionState state, Exception exception)
@@ -32,54 +56,24 @@ public class FacebookFragment extends Fragment
 	        onSessionStateChange(session, state, exception);
 	    }
 	};
-
-	private UiLifecycleHelper uiHelper;
-	private Button friendButton;
-	
-	public FacebookFragment() {}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
-		View view = inflater.inflate(R.layout.fragment_facebook, container, false);
-		
-		friendButton = (Button) view.findViewById(R.id.friend_button);
-		
-		LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
-		authButton.setFragment(this);
-		
-		//request permissions
-		authButton.setReadPermissions(Arrays.asList("read_requests"));
-		
-		return view;
-	}
 	
 	private void onSessionStateChange(Session session, SessionState state, Exception exception)
 	{
-	    if(state.isOpened())
+	    if (state.isOpened())
 	    {
-	    	friendButton.setVisibility(Button.VISIBLE);
-	    	
-	    	friendButton.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v)
-				{
-					sendFriendRequestDialog();
-				}
-			});
+	        System.out.println("Logged in");
+	        sendRequestButton.setVisibility(View.VISIBLE);
 	    }
 	    else if(state.isClosed())
 	    {
-	    	friendButton.setVisibility(Button.INVISIBLE);
+	    	System.out.println("Logged out");
+	    	sendRequestButton.setVisibility(View.INVISIBLE);
 	    }
 	}
 	
-	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 	    super.onCreate(savedInstanceState);
-	    
 	    uiHelper = new UiLifecycleHelper(getActivity(), callback);
 	    uiHelper.onCreate(savedInstanceState);
 	}
@@ -93,11 +87,12 @@ public class FacebookFragment extends Fragment
 	    // session is not null, the session state change notification
 	    // may not be triggered. Trigger it if it's open/closed.
 	    Session session = Session.getActiveSession();
-	    if (session != null &&
-	           (session.isOpened() || session.isClosed()) ) {
+	    
+	    if(session != null && (session.isOpened() || session.isClosed()) )
+	    {
 	        onSessionStateChange(session, session.getState(), null);
 	    }
-
+	    
 	    uiHelper.onResume();
 	}
 
@@ -129,17 +124,14 @@ public class FacebookFragment extends Fragment
 	    uiHelper.onSaveInstanceState(outState);
 	}
 	
-	private void sendFriendRequestDialog()
+	private void sendRequestDialog()
 	{
-		String USER_ID = "vidya.loganathan.14";
-		
-	    Bundle params = new Bundle();
-	   // params.putString("id", USER_ID);
-
-	    params.putString("message", "Learn how to make your Android apps social");
+		String USER_ID = "parthibanloganathan271";
 	    
-		//facebook.dialog(this, "friends", parameters, this);
-
+	    Bundle params = new Bundle();
+	    
+	    params.putString("id", USER_ID);
+	    
 	    WebDialog requestsDialog = (
 	        new WebDialog.RequestsDialogBuilder(getActivity(),
 	            Session.getActiveSession(),
@@ -151,7 +143,6 @@ public class FacebookFragment extends Fragment
 					{
 	                    if(error != null)
 	                    {
-	                    	System.out.println(error.toString());
 	                        if(error instanceof FacebookOperationCanceledException)
 	                        {
 	                            Toast.makeText(getActivity().getApplicationContext(), "Request cancelled", Toast.LENGTH_SHORT).show();
@@ -164,12 +155,11 @@ public class FacebookFragment extends Fragment
 	                    else
 	                    {
 	                        final String requestId = values.getString("request");
-	                        
-	                        if(requestId != null)
+	                        if (requestId != null)
 	                        {
 	                            Toast.makeText(getActivity().getApplicationContext(), "Request sent", Toast.LENGTH_SHORT).show();
 	                        }
-	                        else 
+	                        else
 	                        {
 	                            Toast.makeText(getActivity().getApplicationContext(), "Request cancelled", Toast.LENGTH_SHORT).show();
 	                        }
@@ -180,5 +170,4 @@ public class FacebookFragment extends Fragment
 	            .build();
 	    requestsDialog.show();
 	}
-	
-}*/
+}

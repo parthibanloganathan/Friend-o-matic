@@ -1,4 +1,4 @@
-package com.parthi.friendomatic;
+/*package com.parthi.friendomatic;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,4 +14,4 @@ public class SplashFragment extends Fragment
 	    View view = inflater.inflate(R.layout.activity_splash, container, false);
 	    return view;
 	}
-}
+}*/
