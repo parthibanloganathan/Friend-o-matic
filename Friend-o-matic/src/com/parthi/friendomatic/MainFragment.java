@@ -23,7 +23,7 @@ import com.facebook.widget.WebDialog.OnCompleteListener;
 public class MainFragment extends Fragment
 {
 	private UiLifecycleHelper uiHelper;
-	
+	private UserID id;
 	private Button sendRequestButton;
 	
 	@Override
@@ -41,7 +41,7 @@ public class MainFragment extends Fragment
 	        @Override
 	        public void onClick(View v)
 	        {
-	            sendRequestDialog();        
+	            sendRequestDialog(id.getUserID());        
 	        }
 	    });
 	    
@@ -124,13 +124,11 @@ public class MainFragment extends Fragment
 	    uiHelper.onSaveInstanceState(outState);
 	}
 	
-	private void sendRequestDialog()
+	private void sendRequestDialog(String userID)
 	{
-		String USER_ID = "parthibanloganathan271";
-	    
 	    Bundle params = new Bundle();
 	    
-	    params.putString("id", USER_ID);
+	    params.putString("id", userID);
 	    
 	    WebDialog requestsDialog = (
 	        new WebDialog.RequestsDialogBuilder(getActivity(),
@@ -149,6 +147,7 @@ public class MainFragment extends Fragment
 	                        }
 	                        else
 	                        {
+	                        	System.out.println(error);
 	                            Toast.makeText(getActivity().getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
 	                        }
 	                    }
