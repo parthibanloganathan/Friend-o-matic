@@ -2,20 +2,16 @@ package com.parthi.friendomatic;
 
 public class UserID
 {
-	private static String userID = "";
-
-	public UserID(String userID)
-	{
-		this.userID = userID;
-	}
+	static final String defaultID = "nu11_Fr1end0mat!c_91284143";
+	private static String userID = defaultID;
 	
-	public String getUserID()
+	public static String getUserID()
 	{
 		return userID;
 	}
 
-	public void setUserID(String userID)
+	public static void setUserID(String id)
 	{
-		this.userID = userID;
+		userID = id;
 	}
 }

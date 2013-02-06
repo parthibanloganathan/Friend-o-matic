@@ -13,9 +13,12 @@ import android.widget.Toast;
 
 import com.facebook.FacebookException;
 import com.facebook.FacebookOperationCanceledException;
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
@@ -59,7 +62,12 @@ public class MainFragment extends Fragment
 	
 	private void onSessionStateChange(Session session, SessionState state, Exception exception)
 	{
-	    if (state.isOpened())
+	    if (session != null && session.isOpened()) {
+	        // Get the user's data.
+	        userInfoRequest(session);
+	    }
+	    
+	    if(state.isOpened())
 	    {
 	        System.out.println("Logged in");
 	        sendRequestButton.setVisibility(View.VISIBLE);
@@ -123,6 +131,39 @@ public class MainFragment extends Fragment
 	    super.onSaveInstanceState(outState);
 	    uiHelper.onSaveInstanceState(outState);
 	}
+	
+	/**
+	 * Request to retrieve user's Facebook ID
+	 * @param session
+	 */
+	private void userInfoRequest(final Session session)
+	{
+	    // Make an API call to get user data and define a 
+	    // new callback to handle the response.
+	    Request request = Request.newMeRequest(session, 
+	            new Request.GraphUserCallback() {
+			        @Override
+			        public void onCompleted(GraphUser user, Response response)
+			        {
+			            // If the response is successful
+			            if(session == Session.getActiveSession())
+			            {
+			                if(user != null)
+			                {
+			                	//Sets user's Facebook ID
+			                    UserID.setUserID(user.getId());
+			                    
+			                    System.out.println(UserID.getUserID());
+			                }
+			            }
+			            if(response.getError() != null)
+			            {
+			                // Handle errors, will do so later.
+			            }
+			        }
+	    });
+	    request.executeAsync();
+	} 
 	
 	private void sendRequestDialog(String userID)
 	{

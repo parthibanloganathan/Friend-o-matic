@@ -245,6 +245,7 @@ containing a value of this type.
         public static final int profile_name=0x7f040006;
         public static final int search_box=0x7f040018;
         public static final int sendRequestButton=0x7f040004;
+        public static final int settings=0x7f040033;
         public static final int small=0x7f040000;
         public static final int splash_icon=0x7f040005;
         public static final int tableRow0=0x7f04001e;
@@ -283,6 +284,7 @@ containing a value of this type.
     }
     public static final class menu {
         public static final int activity_main=0x7f090000;
+        public static final int menu_settings=0x7f090001;
     }
     public static final class string {
         public static final int app_id=0x7f05001c;

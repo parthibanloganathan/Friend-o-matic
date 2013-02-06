@@ -104,6 +104,7 @@ int id picker_subtitle 0x7f040019
 int id profile_name 0x7f040006
 int id search_box 0x7f040018
 int id sendRequestButton 0x7f040004
+int id settings 0x7f040033
 int id small 0x7f040000
 int id splash_icon 0x7f040005
 int id tableRow0 0x7f04001e
@@ -138,6 +139,7 @@ int layout com_facebook_usersettingsfragment 0x7f03000f
 int layout fragment_contacts 0x7f030010
 int layout fragment_facebook 0x7f030011
 int menu activity_main 0x7f090000
+int menu menu_settings 0x7f090001
 int string app_id 0x7f05001c
 int string app_name 0x7f050019
 int string com_facebook_choose_friends 0x7f05000f
