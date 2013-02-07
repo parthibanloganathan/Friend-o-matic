@@ -26,6 +26,10 @@
 	    android:text="@string/send_request"
 	    />
     
+    <WebView android:layout_width="fill_parent" 
+	    android:layout_height="fill_parent" 
+	    android:id="@+id/webView" />
+    
 <!-- <fragment android:name="com.parthi.friendomatic.SelectionFragment"
           android:id="@+id/selectionFragment"
           android:layout_width="match_parent"

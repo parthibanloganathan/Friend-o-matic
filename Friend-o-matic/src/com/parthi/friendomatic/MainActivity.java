@@ -124,7 +124,8 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         @Override
         public void handleMessage(Message msg)
         {
-            switch (msg.what) {
+            switch (msg.what)
+            {
             case MESSAGE_SENT:
                 Toast.makeText(getApplicationContext(), "Friend Request sent.", Toast.LENGTH_SHORT).show();
                 break;
@@ -175,7 +176,9 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         // record 0 contains the MIME type, record 1 is the AAR, if present
         
         //add friend ID to database
-        addData(new String(msg.getRecords()[0].getPayload()));
+        String friendID = new String(msg.getRecords()[0].getPayload());
+        System.out.println("Received message : "+friendID);
+        addData(friendID);
     }
 
     /**
@@ -195,7 +198,7 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // If NFC is not available, we won't be needing this menu
-        if (mNfcAdapter == null)
+        if(mNfcAdapter == null)
         {
             return super.onCreateOptionsMenu(menu);
         }
@@ -207,7 +210,7 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        switch (item.getItemId())
+        switch(item.getItemId())
         {
             case R.id.menu_settings:
                 Intent intent = new Intent(Settings.ACTION_NFCSHARING_SETTINGS);
@@ -223,7 +226,7 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
      */
     public void addData(String id)
     {
-	    datasource.createData(id);
+	    datasource.createEntry(id);
     }
     
     public void deleteData(String id)

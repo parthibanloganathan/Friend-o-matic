@@ -14,29 +14,30 @@ public class DataAccessObject {
   // Database fields
   private SQLiteDatabase database;
   private Database dbHelper;
-  private String[] allColumns = { Database.COLUMN_ID,
-		  Database.COLUMN_COMMENT };
+  private String[] allColumns = { Database.COLUMN_NAME };
 
-  public DataAccessObject(Context context) {
+  public DataAccessObject(Context context)
+  {
     dbHelper = new Database(context);
   }
 
-  public void open() throws SQLException {
+  public void open() throws SQLException
+  {
     database = dbHelper.getWritableDatabase();
   }
 
-  public void close() {
+  public void close()
+  {
     dbHelper.close();
   }
 
-  public Data createData(String data)
+  public Data createEntry(String entry)
   {
     ContentValues values = new ContentValues();
-    values.put(Database.COLUMN_COMMENT, data);
-    long insertId = database.insert(Database.TABLE_COMMENTS, null,
-        values);
-    Cursor cursor = database.query(Database.TABLE_COMMENTS,
-        allColumns, Database.COLUMN_ID + " = " + insertId, null,
+    values.put(Database.COLUMN_NAME, entry);
+    long insertId = database.insert(Database.TABLE_NAME, null, values);
+    Cursor cursor = database.query(Database.TABLE_NAME,
+        allColumns, Database.COLUMN_NAME + " = " + insertId, null,
         null, null, null);
     cursor.moveToFirst();
     Data newdata = cursorToData(cursor);
@@ -44,19 +45,18 @@ public class DataAccessObject {
     return newdata;
   }
 
-  public void deleteData(String id)
+  public void deleteData(String data)
   {
-    System.out.println("Data deleted with id: " + id);
-    database.delete(Database.TABLE_COMMENTS, Database.COLUMN_ID
-        + " = " + id, null);
+    System.out.println("Data deleted with id: " + data);
+    database.delete(Database.TABLE_NAME, Database.COLUMN_NAME
+        + " = " + data, null);
   }
 
   public List<Data> getAllData()
   {
     List<Data> data = new ArrayList<Data>();
 
-    Cursor cursor = database.query(Database.TABLE_COMMENTS,
-        allColumns, null, null, null, null, null);
+    Cursor cursor = database.query(Database.TABLE_NAME, allColumns, null, null, null, null, null);
 
     cursor.moveToFirst();
     while(!cursor.isAfterLast())

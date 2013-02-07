@@ -1,6 +1,6 @@
 package com.parthi.friendomatic;
 
-import java.util.Arrays;
+import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,11 +8,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.facebook.FacebookException;
-import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -20,14 +18,16 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
-import com.facebook.widget.WebDialog;
-import com.facebook.widget.WebDialog.OnCompleteListener;
 
 public class MainFragment extends Fragment
 {
 	private UiLifecycleHelper uiHelper;
-	private UserID id;
 	private Button sendRequestButton;
+	private WebView webView;
+	private final String app_id = "551563974854004";
+	
+	//Database
+	private DataAccessObject datasource;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -35,18 +35,17 @@ public class MainFragment extends Fragment
 	    View view = inflater.inflate(R.layout.activity_main, container, false);
 
 	    LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
-	    authButton.setReadPermissions(Arrays.asList("user_likes", "user_status"));
+	    //authButton.setReadPermissions(Arrays.asList("user_likes", "user_status"));           TEMPORARILY REMOVED
 	    authButton.setFragment(this);
 	    
-	    sendRequestButton = (Button) view.findViewById(R.id.sendRequestButton);
-	    sendRequestButton.setOnClickListener(new View.OnClickListener()
+	    webView = (WebView) view.findViewById(R.id.webView);
+	    
+	    Session session = Session.getActiveSession();
+	    if(session != null && session.isOpened())
 	    {
-	        @Override
-	        public void onClick(View v)
-	        {
-	            sendRequestDialog(id.getUserID());        
-	        }
-	    });
+	        // Get the user's id
+	        userInfoRequest(session);
+	    }
 	    
 	    return view;
 	}
@@ -62,26 +61,40 @@ public class MainFragment extends Fragment
 	
 	private void onSessionStateChange(Session session, SessionState state, Exception exception)
 	{
-	    if (session != null && session.isOpened()) {
+		System.out.println("session changed");
+	    if(session != null && session.isOpened())
+	    {
 	        // Get the user's data.
 	        userInfoRequest(session);
+	        
+	        //Send friend requests
+	        List<Data> friends = datasource.getAllData();
+	        
+	        for(Data friend : friends)
+	        {
+	        	sendRequestDialog(friend.getFriendID());
+	        	datasource.deleteData(friend.getFriendID());
+	        }
 	    }
 	    
 	    if(state.isOpened())
 	    {
 	        System.out.println("Logged in");
-	        sendRequestButton.setVisibility(View.VISIBLE);
 	    }
 	    else if(state.isClosed())
 	    {
 	    	System.out.println("Logged out");
-	    	sendRequestButton.setVisibility(View.INVISIBLE);
 	    }
 	}
 	
 	public void onCreate(Bundle savedInstanceState)
 	{
 	    super.onCreate(savedInstanceState);
+	    
+        //Database
+        datasource = new DataAccessObject(getActivity());
+        datasource.open();
+        
 	    uiHelper = new UiLifecycleHelper(getActivity(), callback);
 	    uiHelper.onCreate(savedInstanceState);
 	}
@@ -153,11 +166,12 @@ public class MainFragment extends Fragment
 			                	//Sets user's Facebook ID
 			                    UserID.setUserID(user.getId());
 			                    
-			                    System.out.println(UserID.getUserID());
+			                    System.out.println("User ID: "+UserID.getUserID());
 			                }
 			            }
 			            if(response.getError() != null)
 			            {
+			            	System.out.println("Error in retrieving User ID");
 			                // Handle errors, will do so later.
 			            }
 			        }
@@ -165,49 +179,11 @@ public class MainFragment extends Fragment
 	    request.executeAsync();
 	} 
 	
-	private void sendRequestDialog(String userID)
+	private void sendRequestDialog(String friendID)
 	{
-	    Bundle params = new Bundle();
-	    
-	    params.putString("id", userID);
-	    
-	    WebDialog requestsDialog = (
-	        new WebDialog.RequestsDialogBuilder(getActivity(),
-	            Session.getActiveSession(),
-	            params))
-	            .setOnCompleteListener(new OnCompleteListener()
-	            {
-					@Override
-					public void onComplete(Bundle values, FacebookException error)
-					{
-	                    if(error != null)
-	                    {
-	                        if(error instanceof FacebookOperationCanceledException)
-	                        {
-	                            Toast.makeText(getActivity().getApplicationContext(), "Request cancelled", Toast.LENGTH_SHORT).show();
-	                        }
-	                        else
-	                        {
-	                        	System.out.println(error);
-	                            Toast.makeText(getActivity().getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
-	                        }
-	                    }
-	                    else
-	                    {
-	                        final String requestId = values.getString("request");
-	                        if (requestId != null)
-	                        {
-	                            Toast.makeText(getActivity().getApplicationContext(), "Request sent", Toast.LENGTH_SHORT).show();
-	                        }
-	                        else
-	                        {
-	                            Toast.makeText(getActivity().getApplicationContext(), "Request cancelled", Toast.LENGTH_SHORT).show();
-	                        }
-	                    }   
-					}
-
-	            })
-	            .build();
-	    requestsDialog.show();
+	    webView.loadUrl("http://www.facebook.com/dialog/friends/?"+
+	    		  "id=" + friendID + "&"+
+	    		  "app_id=" + app_id + "&" +
+	    		  "redirect_uri=https://www.facebook.com/");
 	}
 }
