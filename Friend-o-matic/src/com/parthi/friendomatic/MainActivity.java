@@ -2,7 +2,9 @@ package com.parthi.friendomatic;
 
 import java.nio.charset.Charset;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -22,7 +24,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements CreateNdefMessageCallback, OnNdefPushCompleteCallback
@@ -48,7 +49,7 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
 	public void onCreate(Bundle savedInstanceState)
 	{
 	    super.onCreate(savedInstanceState);
-	    
+	  
         // Check for available NFC Adapter
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(mNfcAdapter == null)
@@ -63,8 +64,6 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         //Database
         datasource = new DataAccessObject(this);
         datasource.open();
-        
-        addData("DerekHe");
         
         //Facebook
 	    if(savedInstanceState == null)
@@ -91,9 +90,9 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
     {
         Time time = new Time();
         time.setToNow();
-        String text = (UserID.getUserID());
+        String text = (User.getUserID());
         
-        if(text.equals(UserID.defaultID))
+        if(text.equals(User.defaultID))
         {
         	//get user's facebook id
         }

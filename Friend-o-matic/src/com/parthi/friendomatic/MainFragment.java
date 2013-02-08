@@ -2,7 +2,9 @@ package com.parthi.friendomatic;
 
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -23,7 +25,7 @@ import com.facebook.widget.LoginButton;
 public class MainFragment extends Fragment
 {
 	private UiLifecycleHelper uiHelper;
-	private Button sendRequestButton;
+	private TextView userstatus;
 	private WebView webView;
 	private final String app_id = "551563974854004";
 	
@@ -36,12 +38,13 @@ public class MainFragment extends Fragment
 	    View view = inflater.inflate(R.layout.activity_main, container, false);
 
 	    LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
-	    //authButton.setReadPermissions(Arrays.asList("user_likes", "user_status"));           TEMPORARILY REMOVED
 	    authButton.setFragment(this);
 	    
 	    webView = (WebView) view.findViewById(R.id.webView);
-	    webView.getSettings().setJavaScriptEnabled(true);
+	    //webView.getSettings().setJavaScriptEnabled(true);
 	    webView.setWebViewClient(new Callback());
+	    
+	    userstatus = (TextView) view.findViewById(R.id.loginmessage);
 	    
 	    Session session = Session.getActiveSession();
 	    if(session != null && session.isOpened())
@@ -90,11 +93,22 @@ public class MainFragment extends Fragment
 	    
 	    if(state.isOpened())
 	    {
+	    	SharedPreferences userInfo = getActivity().getSharedPreferences("FriendomaticUser", Context.MODE_PRIVATE);
+	    	String id = userInfo.getString("id", User.defaultID);
+	    	String name = userInfo.getString("name", User.defaultName);
+	    	
+	    	User.setUserID(id);
+	    	User.setName(name);
+	    	
 	        System.out.println("Logged in");
+	        userstatus.setText("Logged in as " + User.getName());
+	        
 	    }
 	    else if(state.isClosed())
 	    {
 	    	System.out.println("Logged out");
+	    	userstatus.setText("Log in using Facebook");
+	    	webView.loadUrl("https://www.facebook.com");
 	    }
 	}
 	
@@ -174,10 +188,22 @@ public class MainFragment extends Fragment
 			            {
 			                if(user != null)
 			                {
-			                	//Sets user's Facebook ID
-			                    UserID.setUserID(user.getId());
+			                	//Sets user's Facebook ID and name
+			                    User.setUserID(user.getId());
+			                    User.setName(user.getName());
 			                    
-			                    System.out.println("User ID: "+UserID.getUserID());
+			        		    //Save to Preferences
+			        		    SharedPreferences userInfo = getActivity().getSharedPreferences("FriendomaticUser", Context.MODE_PRIVATE);
+			        		    SharedPreferences.Editor editor = userInfo.edit();
+
+			        		    // Edit the saved preferences
+			        		    editor.putString("id", User.getUserID());
+			        		    editor.putString("name", User.getName());
+			        		    
+			        		    editor.commit();
+			                    
+			                    System.out.println("User ID: "+User.getUserID());
+			                    System.out.println("User Name: "+User.getName());
 			                }
 			            }
 			            if(response.getError() != null)

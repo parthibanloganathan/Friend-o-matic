@@ -68,7 +68,7 @@ int drawable com_facebook_top_button 0x7f02001d
 int drawable com_facebook_usersettingsfragment_background_gradient 0x7f02001e
 int drawable ic_launcher 0x7f02001f
 int id TableLayout1 0x7f04001b
-int id authButton 0x7f040003
+int id authButton 0x7f040004
 int id com_facebook_login_activity_progress_bar 0x7f040008
 int id com_facebook_picker_activity_circle 0x7f040007
 int id com_facebook_picker_checkbox 0x7f04000a
@@ -94,12 +94,12 @@ int id home 0x7f040029
 int id large 0x7f040002
 int id lastname 0x7f040023
 int id linearLayout1 0x7f04002d
+int id loginmessage 0x7f040003
 int id menu_settings 0x7f04002f
 int id mobile 0x7f040026
 int id normal 0x7f040001
 int id picker_subtitle 0x7f040017
 int id search_box 0x7f040016
-int id sendRequestButton 0x7f040004
 int id settings 0x7f040030
 int id small 0x7f040000
 int id tableRow0 0x7f04001c
@@ -160,9 +160,8 @@ int string com_facebook_requesterror_web_login 0x7f050014
 int string com_facebook_usersettingsfragment_log_in_button 0x7f050008
 int string com_facebook_usersettingsfragment_logged_in 0x7f050009
 int string com_facebook_usersettingsfragment_not_logged_in 0x7f05000a
-int string get_started 0x7f05001d
 int string menu_settings 0x7f05001b
-int string send_request 0x7f05001e
+int string message 0x7f05001d
 int string settings 0x7f05001a
 int style AppBaseTheme 0x7f080002
 int style AppTheme 0x7f080003
