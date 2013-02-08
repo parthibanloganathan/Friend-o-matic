@@ -30,19 +30,4 @@
 	    android:layout_height="fill_parent" 
 	    android:id="@+id/webView" />
     
-<!-- <fragment android:name="com.parthi.friendomatic.SelectionFragment"
-          android:id="@+id/selectionFragment"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent" />
-    
-    <fragment android:name="com.parthi.friendomatic.SplashFragment"
-          android:id="@+id/splashFragment"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent" />
-    
-    <fragment android:name="com.facebook.widget.UserSettingsFragment"
-          android:id="@+id/userSettingsFragment"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent" />
-     -->    
 </LinearLayout>

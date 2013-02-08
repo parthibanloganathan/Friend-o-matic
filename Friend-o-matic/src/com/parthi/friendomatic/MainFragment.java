@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 
 import com.facebook.Request;
@@ -39,6 +40,8 @@ public class MainFragment extends Fragment
 	    authButton.setFragment(this);
 	    
 	    webView = (WebView) view.findViewById(R.id.webView);
+	    webView.getSettings().setJavaScriptEnabled(true);
+	    webView.setWebViewClient(new Callback());
 	    
 	    Session session = Session.getActiveSession();
 	    if(session != null && session.isOpened())
@@ -70,10 +73,18 @@ public class MainFragment extends Fragment
 	        //Send friend requests
 	        List<Data> friends = datasource.getAllData();
 	        
+	        System.out.println("!!!!!!!!!!!!!!");
 	        for(Data friend : friends)
 	        {
-	        	sendRequestDialog(friend.getFriendID());
+	        	String friendID = friend.getFriendID();
+	        	System.out.println("We have: "+friendID);
+	        }
+	        
+	        for(Data friend : friends)
+	        {
+	        	String friendID = friend.getFriendID();
 	        	datasource.deleteData(friend.getFriendID());
+	        	sendRequestDialog(friendID);
 	        }
 	    }
 	    
@@ -184,6 +195,16 @@ public class MainFragment extends Fragment
 	    webView.loadUrl("http://www.facebook.com/dialog/friends/?"+
 	    		  "id=" + friendID + "&"+
 	    		  "app_id=" + app_id + "&" +
-	    		  "redirect_uri=https://www.facebook.com/");
+	    		  "redirect_uri=https://www.facebook.com/connect/login_success.html");
 	}
+	
+	 private class Callback extends WebViewClient
+	 { 
+         @Override
+         public boolean shouldOverrideUrlLoading(WebView view, String url)
+         {
+             return(false);
+         }
+
+     }
 }

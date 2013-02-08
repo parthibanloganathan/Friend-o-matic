@@ -64,6 +64,8 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         datasource = new DataAccessObject(this);
         datasource.open();
         
+        addData("DerekHe");
+        
         //Facebook
 	    if(savedInstanceState == null)
 	    {
@@ -90,6 +92,12 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         Time time = new Time();
         time.setToNow();
         String text = (UserID.getUserID());
+        
+        if(text.equals(UserID.defaultID))
+        {
+        	//get user's facebook id
+        }
+        
         NdefMessage msg = new NdefMessage(
                 new NdefRecord[]
                 		{ createMimeRecord(

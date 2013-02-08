@@ -18,38 +18,39 @@ public class DataAccessObject {
 
   public DataAccessObject(Context context)
   {
-    dbHelper = new Database(context);
+	  dbHelper = new Database(context);
   }
 
   public void open() throws SQLException
   {
-    database = dbHelper.getWritableDatabase();
+	  database = dbHelper.getWritableDatabase();
   }
 
   public void close()
   {
-    dbHelper.close();
+	  dbHelper.close();
   }
 
-  public Data createEntry(String entry)
+  public void createEntry(String entry)
   {
-    ContentValues values = new ContentValues();
-    values.put(Database.COLUMN_NAME, entry);
-    long insertId = database.insert(Database.TABLE_NAME, null, values);
-    Cursor cursor = database.query(Database.TABLE_NAME,
-        allColumns, Database.COLUMN_NAME + " = " + insertId, null,
-        null, null, null);
-    cursor.moveToFirst();
-    Data newdata = cursorToData(cursor);
-    cursor.close();
-    return newdata;
+	  ContentValues values = new ContentValues();
+	  values.put(Database.COLUMN_NAME, entry);
+	  long insertId = database.insertOrThrow(Database.TABLE_NAME, null, values);
+	  Cursor cursor = database.query(Database.TABLE_NAME,
+		        allColumns, Database.COLUMN_NAME + " = " + insertId, null,
+		        null, null, null);
+	  
+	 /* if(cursor.moveToFirst())
+	  {
+		  Data newdata = cursorToData(cursor);
+		  cursor.close();
+	  }*/
   }
 
   public void deleteData(String data)
   {
-    System.out.println("Data deleted with id: " + data);
-    database.delete(Database.TABLE_NAME, Database.COLUMN_NAME
-        + " = " + data, null);
+	  System.out.println("Data deleted with id: " + data);
+	  database.delete(Database.TABLE_NAME, Database.COLUMN_NAME + " = '" + data + "'", null);
   }
 
   public List<Data> getAllData()
@@ -63,7 +64,7 @@ public class DataAccessObject {
     {
     	Data comment = cursorToData(cursor);
     	data.add(comment);
-      cursor.moveToNext();
+    	cursor.moveToNext();
     }
     // Make sure to close the cursor
     cursor.close();
