@@ -62,8 +62,8 @@ public class DataAccessObject {
     cursor.moveToFirst();
     while(!cursor.isAfterLast())
     {
-    	Data comment = cursorToData(cursor);
-    	data.add(comment);
+    	Data entry = cursorToData(cursor);
+    	data.add(entry);
     	cursor.moveToNext();
     }
     // Make sure to close the cursor
@@ -71,6 +71,31 @@ public class DataAccessObject {
     return data;
   }
 
+  public Data getFirstEntry()
+  {
+	    Cursor cursor = database.query(Database.TABLE_NAME, allColumns, null, null, null, null, null);
+
+	    boolean a = cursor.moveToFirst();
+	    System.out.println("cursor: " + a);
+	    
+	    Data data = cursorToData(cursor);
+	 
+	    // Make sure to close the cursor
+	    cursor.close();
+	    return data;
+  }
+  
+  public int getSize()
+  {
+	  Cursor cursor = database.rawQuery("SELECT Count(*) from " + Database.TABLE_NAME, null);
+	  
+	  cursor.moveToFirst();
+	  
+	  int size = cursor.getInt(0);
+	  
+	  return size;
+  }
+  
   private Data cursorToData(Cursor cursor)
   {
 	  Data data = new Data();

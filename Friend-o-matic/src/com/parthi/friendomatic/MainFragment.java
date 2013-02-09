@@ -1,7 +1,4 @@
 package com.parthi.friendomatic;
-
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,7 +10,10 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -21,6 +21,8 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.OnCompleteListener;
 
 public class MainFragment extends Fragment
 {
@@ -39,11 +41,7 @@ public class MainFragment extends Fragment
 
 	    LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 	    authButton.setFragment(this);
-	    
-	    webView = (WebView) view.findViewById(R.id.webView);
-	    //webView.getSettings().setJavaScriptEnabled(true);
-	    webView.setWebViewClient(new Callback());
-	    
+	  
 	    userstatus = (TextView) view.findViewById(R.id.loginmessage);
 	    
 	    Session session = Session.getActiveSession();
@@ -51,6 +49,7 @@ public class MainFragment extends Fragment
 	    {
 	        // Get the user's id
 	        userInfoRequest(session);
+	        processFriendRequests();
 	    }
 	    
 	    return view;
@@ -65,6 +64,21 @@ public class MainFragment extends Fragment
 	    }
 	};
 	
+	private void processFriendRequests()
+	{
+			System.out.println("Processing friend request");
+        	//Send friend requests
+			
+			if(datasource.getSize() > 0)
+			{
+				Data friend = datasource.getFirstEntry();
+		
+	        	String friendID = friend.getFriendID();
+	        	datasource.deleteData(friend.getFriendID());
+	        	sendRequestDialog(friendID);
+			}
+	}
+	
 	private void onSessionStateChange(Session session, SessionState state, Exception exception)
 	{
 		System.out.println("session changed");
@@ -72,23 +86,7 @@ public class MainFragment extends Fragment
 	    {
 	        // Get the user's data.
 	        userInfoRequest(session);
-	        
-	        //Send friend requests
-	        List<Data> friends = datasource.getAllData();
-	        
-	        System.out.println("!!!!!!!!!!!!!!");
-	        for(Data friend : friends)
-	        {
-	        	String friendID = friend.getFriendID();
-	        	System.out.println("We have: "+friendID);
-	        }
-	        
-	        for(Data friend : friends)
-	        {
-	        	String friendID = friend.getFriendID();
-	        	datasource.deleteData(friend.getFriendID());
-	        	sendRequestDialog(friendID);
-	        }
+	        processFriendRequests();
 	    }
 	    
 	    if(state.isOpened())
@@ -153,6 +151,7 @@ public class MainFragment extends Fragment
 	public void onPause()
 	{
 	    super.onPause();
+	    
 	    uiHelper.onPause();
 	}
 
@@ -217,20 +216,66 @@ public class MainFragment extends Fragment
 	} 
 	
 	private void sendRequestDialog(String friendID)
-	{
-	    webView.loadUrl("http://www.facebook.com/dialog/friends/?"+
-	    		  "id=" + friendID + "&"+
-	    		  "app_id=" + app_id + "&" +
-	    		  "redirect_uri=https://www.facebook.com/connect/login_success.html");
+	{	
+		Bundle params = new Bundle();
+
+		params.putString("id", friendID);
+
+		WebDialog friendDialog = (
+				new WebDialog.Builder(getActivity(), Session.getActiveSession(), "friends", params))
+        .setOnCompleteListener(new OnCompleteListener()
+        {
+            @Override
+            public void onComplete(Bundle values, FacebookException error)
+            {
+                if(error != null)
+                {
+                    if(error instanceof FacebookOperationCanceledException)
+                    {
+                        Toast.makeText(getActivity().getApplicationContext(), "Request cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(getActivity().getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else
+                {
+                    final String requestId = values.getString("request");
+                    if (requestId != null)
+                    {
+                        Toast.makeText(getActivity().getApplicationContext(), "Request sent", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(getActivity().getApplicationContext(), "Request cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                }   
+            }
+
+        })
+        .build();
+		friendDialog.show();
+	    
+	    System.out.println("sending request: "+friendID);
 	}
 	
-	 private class Callback extends WebViewClient
+	 private class FriendRequestCallback extends WebViewClient
 	 { 
          @Override
          public boolean shouldOverrideUrlLoading(WebView view, String url)
          {
-             return(false);
+    	     /*if(url.contains("login_success.html"))
+    	     {
+    	    	 System.out.println("entered overload url");
+    	    	 processFriendRequests();
+    	    	 
+    	    	 return true;
+    	     }
+    	     else
+    	     {*/
+    	    	 return false;
+    	     //}
          }
-
      }
 }

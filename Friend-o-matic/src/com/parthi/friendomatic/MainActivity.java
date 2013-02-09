@@ -65,6 +65,11 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         datasource = new DataAccessObject(this);
         datasource.open();
         
+        //
+        addData("DerekHe");
+        addData("kaushik.ktiwari");
+        //
+        
         //Facebook
 	    if(savedInstanceState == null)
 	    {
@@ -220,6 +225,7 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         switch(item.getItemId())
         {
             case R.id.menu_settings:
+            	System.out.println("clicked menu settings");
                 Intent intent = new Intent(Settings.ACTION_NFCSHARING_SETTINGS);
                 startActivity(intent);
                 return true;
