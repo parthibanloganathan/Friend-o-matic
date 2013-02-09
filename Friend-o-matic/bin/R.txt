@@ -22,6 +22,7 @@ int color com_facebook_usersettingsfragment_connected_shadow_color 0x7f060002
 int color com_facebook_usersettingsfragment_connected_text_color 0x7f060001
 int color com_facebook_usersettingsfragment_not_connected_text_color 0x7f060003
 int color facebook_blue 0x7f060006
+int color facebook_darkblue 0x7f060007
 int color white 0x7f060005
 int dimen com_facebook_loginview_height 0x7f070007
 int dimen com_facebook_loginview_padding_bottom 0x7f070005
@@ -93,7 +94,7 @@ int id com_facebook_usersettingsfragment_login_button 0x7f04001a
 int id com_facebook_usersettingsfragment_logo_image 0x7f040018
 int id com_facebook_usersettingsfragment_profile_name 0x7f040019
 int id contact_button 0x7f04002e
-int id deleteRequestButton 0x7f040031
+int id delete 0x7f040031
 int id firstname 0x7f040020
 int id friend 0x7f040030
 int id friends 0x7f040032
@@ -122,6 +123,8 @@ int id textView4 0x7f040025
 int id textView5 0x7f040028
 int id textView6 0x7f04002b
 int id work 0x7f04002c
+int integer tag_accept 0x7f090000
+int integer tag_delete 0x7f090001
 int layout activity_friendslist 0x7f030000
 int layout activity_main 0x7f030001
 int layout com_facebook_friendpickerfragment 0x7f030002
@@ -139,9 +142,9 @@ int layout com_facebook_placepickerfragment_list_row 0x7f03000d
 int layout com_facebook_usersettingsfragment 0x7f03000e
 int layout fragment_contacts 0x7f03000f
 int layout friend_row 0x7f030010
-int menu menu_friends 0x7f090000
-int menu menu_home 0x7f090001
-int menu menu_nfc 0x7f090002
+int menu menu_friends 0x7f0a0000
+int menu menu_home 0x7f0a0001
+int menu menu_nfc 0x7f0a0002
 int string app_id 0x7f05001c
 int string app_name 0x7f050019
 int string com_facebook_choose_friends 0x7f05000f

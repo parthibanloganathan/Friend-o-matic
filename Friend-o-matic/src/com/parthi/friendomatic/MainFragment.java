@@ -147,7 +147,7 @@ public class MainFragment extends Fragment
 	 * Request to retrieve user's Facebook ID
 	 * @param session
 	 */
-	private void userInfoRequest(final Session session)
+	public void userInfoRequest(final Session session)
 	{
 	    // Make an API call to get user data and define a 
 	    // new callback to handle the response.
@@ -205,11 +205,11 @@ public class MainFragment extends Fragment
                 {
                     if(error instanceof FacebookOperationCanceledException)
                     {
-                        Toast.makeText(getActivity().getApplicationContext(), "Request cancelled", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity().getApplicationContext(), "Request cancelled", Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
-                        Toast.makeText(getActivity().getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity().getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else
@@ -217,11 +217,11 @@ public class MainFragment extends Fragment
                     final String requestId = values.getString("request");
                     if (requestId != null)
                     {
-                        Toast.makeText(getActivity().getApplicationContext(), "Request sent", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity().getApplicationContext(), "Request sent", Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
-                        Toast.makeText(getActivity().getApplicationContext(), "Request cancelled", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity().getApplicationContext(), "Request cancelled", Toast.LENGTH_SHORT).show();
                     }
                 }   
             }

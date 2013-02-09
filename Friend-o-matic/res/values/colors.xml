@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
 
+<resources>
     <color name="white">#FFFFFF</color>
     <color name="facebook_blue">#3B5998</color>
-    
+    <color name="facebook_darkblue">#213d78</color>
 </resources>

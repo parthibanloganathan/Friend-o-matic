@@ -4,20 +4,33 @@
         android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
         android:paddingLeft="10dp" android:paddingRight="10dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" android:paddingTop="2dp">
+        android:orientation="horizontal" android:paddingTop="2dp"
+        android:background="@color/facebook_darkblue">
         
         <TextView android:layout_height="wrap_content"
            		android:layout_width="0dp"
 		        android:gravity="left"
            		android:layout_weight="1"
-		        android:id="@+id/friend">
+		        android:id="@+id/friend"
+		        android:textColor="@color/white">
         </TextView>
         
-        <Button android:layout_width="wrap_content"
+    <!-- <Button android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:id="@+id/deleteRequestButton" 
-            android:text="Delete" >   
+            android:id="@+id/accept" 
+            android:textColor="@color/white"
+            android:text="Accept"
+            android:onClick="onClickListener" >   
+        </Button> -->
+        
+        <Button android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:id="@+id/delete"
+            android:textColor="@color/white"
+            android:text="Delete"
+            android:onClick="onClickListener" >   
         </Button>
         
 </LinearLayout>

@@ -42,14 +42,17 @@ public class FriendsAdapter extends BaseAdapter implements OnClickListener
     {
         Data entry = friendsList.get(position);
         
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.friend_row, null);
+        //if(convertView == null)
+        //{
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.friend_row, null);
+        //}
         
         TextView friendText = (TextView) convertView.findViewById(R.id.friend);
         friendText.setText(entry.getFriendName());
 
         // Set the onClick Listener on this button
-        Button deleteButton = (Button) convertView.findViewById(R.id.deleteRequestButton);
+        Button deleteButton = (Button) convertView.findViewById(R.id.delete);
         deleteButton.setFocusableInTouchMode(false);
         deleteButton.setFocusable(false);
         deleteButton.setOnClickListener(this);
@@ -59,6 +62,8 @@ public class FriendsAdapter extends BaseAdapter implements OnClickListener
         // the item
         // that was clicked.
         deleteButton.setTag(entry);
+
+        // btnRemove.setId(position);
        
 
         return convertView;

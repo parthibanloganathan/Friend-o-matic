@@ -86,7 +86,7 @@ public class FriendsListActivity extends Activity
         datasource.open();
         
         ListView list = (ListView) findViewById(R.id.friendslist);
-        list.setClickable(true);
+        //list.setClickable(true);
 
         final List<Data> friends = datasource.getAllData();
         

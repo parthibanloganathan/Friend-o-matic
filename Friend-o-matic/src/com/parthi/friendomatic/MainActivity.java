@@ -2,6 +2,8 @@ package com.parthi.friendomatic;
 
 import java.nio.charset.Charset;
 
+import com.facebook.Session;
+
 import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -139,10 +141,10 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         time.setToNow();
         String text = User.getUserID() + "~" + User.getName();
         
-        if(text.equals(User.defaultID))
+        /*if(text.equals(User.defaultID))
         {
-        	//get user's facebook id
-        }
+        	mainFragment.userInfoRequest(Session.getActiveSession());
+        }*/
         
         NdefMessage msg = new NdefMessage(
                 new NdefRecord[]
@@ -190,7 +192,6 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
     @Override
     protected void onResume()
     {
-        
         //open database
         datasource.open();
         
@@ -235,8 +236,18 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         String id = output.substring(0, output.indexOf('~'));
         String name = output.substring(output.indexOf('~') + 1);
         Functions.addData(datasource, id, name);
+        
+        redirectToFriendLists();
     }
 
+    public void redirectToFriendLists()
+    {
+    	Toast.makeText(this, "Friend Request Received.", Toast.LENGTH_SHORT).show();
+    	
+    	Intent intent = new Intent(this, FriendsListActivity.class);
+    	startActivity(intent);
+    }
+    
     /**
      * Creates a custom MIME type encapsulated in an NDEF record
      *
