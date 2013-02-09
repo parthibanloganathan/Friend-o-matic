@@ -2,9 +2,7 @@ package com.parthi.friendomatic;
 
 import java.nio.charset.Charset;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -38,6 +36,55 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
     //Database
     private DataAccessObject datasource;
     
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_friends, menu);
+		inflater.inflate(R.menu.menu_home, menu);
+		inflater.inflate(R.menu.menu_nfc, menu);
+	        
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch(item.getItemId())
+		{
+		    case R.id.friends:
+		    {
+		    	startActivity(new Intent(this, FriendsListActivity.class));
+		        return true;
+		    }
+		    case R.id.home:
+		    {
+		    	Intent intent = new Intent(this, MainActivity.class);
+		    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		    	startActivity(intent);
+		    	return true;
+		    }
+		    case android.R.id.home:
+		    {
+		    	Intent intent = new Intent(this, MainActivity.class);
+		    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		    	startActivity(intent);
+		    	return true;
+		    }
+            case R.id.nfc:
+            {
+                Intent intent = new Intent(Settings.ACTION_NFCSHARING_SETTINGS);
+                startActivity(intent);
+                return true;
+		    }
+		    default:
+		    {
+		        return super.onOptionsItemSelected(item);
+		    }
+		}
+	}		
+    
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 	    View view = inflater.inflate(R.layout.activity_main, container, false);
@@ -65,11 +112,6 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         datasource = new DataAccessObject(this);
         datasource.open();
         
-        //
-        addData("DerekHe");
-        addData("kaushik.ktiwari");
-        //
-        
         //Facebook
 	    if(savedInstanceState == null)
 	    {
@@ -95,7 +137,7 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
     {
         Time time = new Time();
         time.setToNow();
-        String text = (User.getUserID());
+        String text = User.getUserID() + "~" + User.getName();
         
         if(text.equals(User.defaultID))
         {
@@ -188,9 +230,11 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         // record 0 contains the MIME type, record 1 is the AAR, if present
         
         //add friend ID to database
-        String friendID = new String(msg.getRecords()[0].getPayload());
-        System.out.println("Received message : "+friendID);
-        addData(friendID);
+        String output = new String(msg.getRecords()[0].getPayload());
+        
+        String id = output.substring(0, output.indexOf('~'));
+        String name = output.substring(output.indexOf('~') + 1);
+        Functions.addData(datasource, id, name);
     }
 
     /**
@@ -204,46 +248,5 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         NdefRecord mimeRecord = new NdefRecord(
                 NdefRecord.TNF_MIME_MEDIA, mimeBytes, new byte[0], payload);
         return mimeRecord;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // If NFC is not available, we won't be needing this menu
-        if(mNfcAdapter == null)
-        {
-            return super.onCreateOptionsMenu(menu);
-        }
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_settings, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch(item.getItemId())
-        {
-            case R.id.menu_settings:
-            	System.out.println("clicked menu settings");
-                Intent intent = new Intent(Settings.ACTION_NFCSHARING_SETTINGS);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-    
-    /**
-     * Add to database
-     */
-    public void addData(String id)
-    {
-	    datasource.createEntry(id);
-    }
-    
-    public void deleteData(String id)
-    {
-    	datasource.deleteData(id);
     }
 }

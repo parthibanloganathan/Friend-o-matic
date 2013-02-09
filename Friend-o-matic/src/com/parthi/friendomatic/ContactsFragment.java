@@ -1,4 +1,4 @@
-/*package com.parthi.friendomatic;
+/*\package com.parthi.friendomatic;
 
 import java.util.ArrayList;
 

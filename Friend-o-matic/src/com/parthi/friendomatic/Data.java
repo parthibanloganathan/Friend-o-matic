@@ -3,7 +3,8 @@ package com.parthi.friendomatic;
 public class Data
 {
 	  private String friendID;
-	
+	  private String friendName;
+	  
 	  public String getFriendID()
 	  {
 		return friendID;
@@ -14,9 +15,13 @@ public class Data
 			this.friendID = friendID;
 	  }
 
-	  // Will be used by the ArrayAdapter in the ListView
-	  @Override
-	  public String toString() {
-	    return friendID;
-	  }
+	 public String getFriendName()
+	 {
+		 return friendName;
+	 }
+
+	 public void setFriendName(String friendName)
+	 {
+		 this.friendName = friendName;
+	 }
 } 

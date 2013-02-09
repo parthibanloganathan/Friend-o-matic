@@ -14,7 +14,7 @@ public class DataAccessObject {
   // Database fields
   private SQLiteDatabase database;
   private Database dbHelper;
-  private String[] allColumns = { Database.COLUMN_NAME };
+  private String[] allColumns = { Database.COLUMN_ID, Database.COLUMN_NAME };
 
   public DataAccessObject(Context context)
   {
@@ -31,35 +31,29 @@ public class DataAccessObject {
 	  dbHelper.close();
   }
 
-  public void createEntry(String entry)
+  public void createEntry(String id, String name)
   {
 	  ContentValues values = new ContentValues();
-	  values.put(Database.COLUMN_NAME, entry);
-	  long insertId = database.insertOrThrow(Database.TABLE_NAME, null, values);
-	  Cursor cursor = database.query(Database.TABLE_NAME,
-		        allColumns, Database.COLUMN_NAME + " = " + insertId, null,
-		        null, null, null);
-	  
-	 /* if(cursor.moveToFirst())
-	  {
-		  Data newdata = cursorToData(cursor);
-		  cursor.close();
-	  }*/
+	  values.put(Database.COLUMN_ID, id);
+	  values.put(Database.COLUMN_NAME, name);
+	  long insertId = database.insertOrThrow(Database.TABLE, null, values);
+	  Cursor cursor = database.query(Database.TABLE, allColumns, Database.COLUMN_NAME + " = " + insertId, null, null, null, null);
+	  cursor.close();
   }
 
-  public void deleteData(String data)
+  public void deleteData(String id)
   {
-	  System.out.println("Data deleted with id: " + data);
-	  database.delete(Database.TABLE_NAME, Database.COLUMN_NAME + " = '" + data + "'", null);
+	  database.delete(Database.TABLE, Database.COLUMN_ID + "='" + id +"'", null);
   }
 
   public List<Data> getAllData()
   {
     List<Data> data = new ArrayList<Data>();
 
-    Cursor cursor = database.query(Database.TABLE_NAME, allColumns, null, null, null, null, null);
+    Cursor cursor = database.query(Database.TABLE, allColumns, null, null, null, null, null);
 
     cursor.moveToFirst();
+    
     while(!cursor.isAfterLast())
     {
     	Data entry = cursorToData(cursor);
@@ -73,10 +67,9 @@ public class DataAccessObject {
 
   public Data getFirstEntry()
   {
-	    Cursor cursor = database.query(Database.TABLE_NAME, allColumns, null, null, null, null, null);
+	    Cursor cursor = database.query(Database.TABLE, allColumns, null, null, null, null, null);
 
-	    boolean a = cursor.moveToFirst();
-	    System.out.println("cursor: " + a);
+	    cursor.moveToFirst();
 	    
 	    Data data = cursorToData(cursor);
 	 
@@ -87,7 +80,7 @@ public class DataAccessObject {
   
   public int getSize()
   {
-	  Cursor cursor = database.rawQuery("SELECT Count(*) from " + Database.TABLE_NAME, null);
+	  Cursor cursor = database.rawQuery("SELECT Count(*) from " + Database.TABLE, null);
 	  
 	  cursor.moveToFirst();
 	  
@@ -100,6 +93,7 @@ public class DataAccessObject {
   {
 	  Data data = new Data();
       data.setFriendID(cursor.getString(0));
+      data.setFriendName(cursor.getString(1));
       
       return data;
   }

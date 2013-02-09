@@ -1,4 +1,5 @@
 package com.parthi.friendomatic;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,8 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +27,6 @@ public class MainFragment extends Fragment
 {
 	private UiLifecycleHelper uiHelper;
 	private TextView userstatus;
-	private WebView webView;
-	private final String app_id = "551563974854004";
 	
 	//Database
 	private DataAccessObject datasource;
@@ -49,7 +46,6 @@ public class MainFragment extends Fragment
 	    {
 	        // Get the user's id
 	        userInfoRequest(session);
-	        processFriendRequests();
 	    }
 	    
 	    return view;
@@ -64,29 +60,12 @@ public class MainFragment extends Fragment
 	    }
 	};
 	
-	private void processFriendRequests()
-	{
-			System.out.println("Processing friend request");
-        	//Send friend requests
-			
-			if(datasource.getSize() > 0)
-			{
-				Data friend = datasource.getFirstEntry();
-		
-	        	String friendID = friend.getFriendID();
-	        	datasource.deleteData(friend.getFriendID());
-	        	sendRequestDialog(friendID);
-			}
-	}
-	
 	private void onSessionStateChange(Session session, SessionState state, Exception exception)
 	{
-		System.out.println("session changed");
 	    if(session != null && session.isOpened())
 	    {
 	        // Get the user's data.
 	        userInfoRequest(session);
-	        processFriendRequests();
 	    }
 	    
 	    if(state.isOpened())
@@ -97,16 +76,11 @@ public class MainFragment extends Fragment
 	    	
 	    	User.setUserID(id);
 	    	User.setName(name);
-	    	
-	        System.out.println("Logged in");
-	        userstatus.setText("Logged in as " + User.getName());
 	        
 	    }
 	    else if(state.isClosed())
 	    {
-	    	System.out.println("Logged out");
 	    	userstatus.setText("Log in using Facebook");
-	    	webView.loadUrl("https://www.facebook.com");
 	    }
 	}
 	
@@ -200,9 +174,8 @@ public class MainFragment extends Fragment
 			        		    editor.putString("name", User.getName());
 			        		    
 			        		    editor.commit();
-			                    
-			                    System.out.println("User ID: "+User.getUserID());
-			                    System.out.println("User Name: "+User.getName());
+			        		    
+			        		    userstatus.setText("Logged in as " + User.getName());
 			                }
 			            }
 			            if(response.getError() != null)
@@ -215,7 +188,7 @@ public class MainFragment extends Fragment
 	    request.executeAsync();
 	} 
 	
-	private void sendRequestDialog(String friendID)
+	public void sendRequestDialog(String friendID)
 	{	
 		Bundle params = new Bundle();
 
@@ -256,26 +229,5 @@ public class MainFragment extends Fragment
         })
         .build();
 		friendDialog.show();
-	    
-	    System.out.println("sending request: "+friendID);
 	}
-	
-	 private class FriendRequestCallback extends WebViewClient
-	 { 
-         @Override
-         public boolean shouldOverrideUrlLoading(WebView view, String url)
-         {
-    	     /*if(url.contains("login_success.html"))
-    	     {
-    	    	 System.out.println("entered overload url");
-    	    	 processFriendRequests();
-    	    	 
-    	    	 return true;
-    	     }
-    	     else
-    	     {*/
-    	    	 return false;
-    	     //}
-         }
-     }
 }

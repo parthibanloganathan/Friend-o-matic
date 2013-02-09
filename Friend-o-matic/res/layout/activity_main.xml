@@ -15,7 +15,7 @@
        android:gravity="center"
        android:textAppearance="?android:attr/textAppearanceMedium"
        android:textColor="@color/white"
-       android:paddingTop="15dp"
+       android:paddingTop="170dp"
        android:paddingBottom="15dp" />   
     
     <com.facebook.widget.LoginButton
