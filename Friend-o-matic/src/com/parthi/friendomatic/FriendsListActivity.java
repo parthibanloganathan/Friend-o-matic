@@ -49,14 +49,14 @@ public class FriendsListActivity extends Activity
 		    }
 		    case R.id.home:
 		    {
-		    	Intent intent = new Intent(this, MainActivity.class);
+		    	Intent intent = new Intent(this, FriendomaticActivity.class);
 		    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		    	startActivity(intent);
 		    	return true;
 		    }
 		    case android.R.id.home:
 		    {
-		    	Intent intent = new Intent(this, MainActivity.class);
+		    	Intent intent = new Intent(this, FriendomaticActivity.class);
 		    	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		    	startActivity(intent);
 		    	return true;
