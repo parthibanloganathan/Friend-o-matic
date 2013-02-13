@@ -9,10 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.facebook.FacebookException;
-import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -20,8 +17,6 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
-import com.facebook.widget.WebDialog;
-import com.facebook.widget.WebDialog.OnCompleteListener;
 
 public class MainFragment extends Fragment
 {
@@ -44,7 +39,7 @@ public class MainFragment extends Fragment
 	    Session session = Session.getActiveSession();
 	    if(session != null && session.isOpened())
 	    {
-	        // Get the user's id
+	        // Get the user's data.
 	        userInfoRequest(session);
 	    }
 	    
@@ -187,47 +182,4 @@ public class MainFragment extends Fragment
 	    });
 	    request.executeAsync();
 	} 
-	
-	public void sendRequestDialog(String friendID)
-	{	
-		Bundle params = new Bundle();
-
-		params.putString("id", friendID);
-
-		WebDialog friendDialog = (
-				new WebDialog.Builder(getActivity(), Session.getActiveSession(), "friends", params))
-        .setOnCompleteListener(new OnCompleteListener()
-        {
-            @Override
-            public void onComplete(Bundle values, FacebookException error)
-            {
-                if(error != null)
-                {
-                    if(error instanceof FacebookOperationCanceledException)
-                    {
-                        //Toast.makeText(getActivity().getApplicationContext(), "Request cancelled", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        //Toast.makeText(getActivity().getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else
-                {
-                    final String requestId = values.getString("request");
-                    if (requestId != null)
-                    {
-                        //Toast.makeText(getActivity().getApplicationContext(), "Request sent", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        //Toast.makeText(getActivity().getApplicationContext(), "Request cancelled", Toast.LENGTH_SHORT).show();
-                    }
-                }   
-            }
-
-        })
-        .build();
-		friendDialog.show();
-	}
 }

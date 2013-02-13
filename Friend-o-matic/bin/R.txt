@@ -73,6 +73,7 @@ int drawable ic_launcher 0x7f020021
 int drawable icon 0x7f020022
 int id LinearLayout01 0x7f04002f
 int id TableLayout1 0x7f04001b
+int id accept 0x7f040031
 int id authButton 0x7f040005
 int id com_facebook_login_activity_progress_bar 0x7f040008
 int id com_facebook_picker_activity_circle 0x7f040007
@@ -94,10 +95,10 @@ int id com_facebook_usersettingsfragment_login_button 0x7f04001a
 int id com_facebook_usersettingsfragment_logo_image 0x7f040018
 int id com_facebook_usersettingsfragment_profile_name 0x7f040019
 int id contact_button 0x7f04002e
-int id delete 0x7f040031
+int id delete 0x7f040032
 int id firstname 0x7f040020
 int id friend 0x7f040030
-int id friends 0x7f040032
+int id friends 0x7f040033
 int id friendslist 0x7f040003
 int id home 0x7f040029
 int id large 0x7f040002
@@ -105,7 +106,7 @@ int id lastname 0x7f040023
 int id linearLayout1 0x7f04002d
 int id loginmessage 0x7f040004
 int id mobile 0x7f040026
-int id nfc 0x7f040033
+int id nfc 0x7f040034
 int id normal 0x7f040001
 int id picker_subtitle 0x7f040017
 int id search_box 0x7f040016

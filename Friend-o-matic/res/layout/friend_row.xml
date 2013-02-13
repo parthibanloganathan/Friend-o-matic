@@ -15,14 +15,14 @@
 		        android:textColor="@color/white">
         </TextView>
         
-    <!-- <Button android:layout_width="80dp"
+       <Button android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="right"
             android:id="@+id/accept" 
             android:textColor="@color/white"
             android:text="Accept"
             android:onClick="onClickListener" >   
-        </Button> -->
+        </Button>
         
         <Button android:layout_width="80dp"
             android:layout_height="wrap_content"

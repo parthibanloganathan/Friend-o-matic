@@ -114,6 +114,8 @@ public class FriendomaticActivity extends FragmentActivity implements CreateNdef
         datasource = new DataAccessObject(this);
         datasource.open();
         
+        Functions.addData(datasource, "DerekHe", "Derek");
+        
         //Facebook
 	    if(savedInstanceState == null)
 	    {
@@ -141,10 +143,10 @@ public class FriendomaticActivity extends FragmentActivity implements CreateNdef
         time.setToNow();
         String text = User.getUserID() + "~" + User.getName();
         
-        /*if(text.equals(User.defaultID))
+        if(User.getUserID().equals(User.defaultID))
         {
         	mainFragment.userInfoRequest(Session.getActiveSession());
-        }*/
+        }
         
         NdefMessage msg = new NdefMessage(
                 new NdefRecord[]
@@ -256,8 +258,7 @@ public class FriendomaticActivity extends FragmentActivity implements CreateNdef
     public NdefRecord createMimeRecord(String mimeType, byte[] payload)
     {
         byte[] mimeBytes = mimeType.getBytes(Charset.forName("US-ASCII"));
-        NdefRecord mimeRecord = new NdefRecord(
-                NdefRecord.TNF_MIME_MEDIA, mimeBytes, new byte[0], payload);
+        NdefRecord mimeRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, mimeBytes, new byte[0], payload);
         return mimeRecord;
     }
 }

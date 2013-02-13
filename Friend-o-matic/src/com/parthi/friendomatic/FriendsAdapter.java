@@ -2,7 +2,14 @@ package com.parthi.friendomatic;
 
 import java.util.List;
 
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
+import com.facebook.Session;
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.OnCompleteListener;
+
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +17,17 @@ import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FriendsAdapter extends BaseAdapter implements OnClickListener
 {
     private Context context;
 
     private List<Data> friendsList;
-
+    
+    private Data entryToRemove = new Data();
+    
+    
     public FriendsAdapter(Context context, List<Data> friendsList)
     {
         this.context = context;
@@ -51,37 +62,100 @@ public class FriendsAdapter extends BaseAdapter implements OnClickListener
         TextView friendText = (TextView) convertView.findViewById(R.id.friend);
         friendText.setText(entry.getFriendName());
 
-        // Set the onClick Listener on this button
+        Button addButton = (Button) convertView.findViewById(R.id.accept);
+        addButton.setOnClickListener(this);
+        addButton.setTag(entry);
+        
         Button deleteButton = (Button) convertView.findViewById(R.id.delete);
-        deleteButton.setFocusableInTouchMode(false);
-        deleteButton.setFocusable(false);
         deleteButton.setOnClickListener(this);
-        // Set the entry, so that you can capture which item was clicked and
-        // then remove it
-        // As an alternative, you can use the id/position of the item to capture
-        // the item
-        // that was clicked.
         deleteButton.setTag(entry);
-
-        // btnRemove.setId(position);
        
-
         return convertView;
     }
 
     @Override
     public void onClick(View view)
     {
-    	Data entry = (Data) view.getTag();
-    	friendsList.remove(entry);
-    	
-        //Database
+		switch(view.getId())
+		{
+			case R.id.accept:
+			{
+		    	Data entry = (Data) view.getTag();
+				entryToRemove = entry;
+				
+				sendRequestDialog(entry.getFriendID());
+				
+				break;
+			}
+		    case R.id.delete:
+		    {
+		    	Data entry = (Data) view.getTag();
+		    	entryToRemove = entry;
+		    	
+		    	removeFriend();
+		        
+		        break;
+		    }
+		}
+    }
+    
+	private void sendRequestDialog(String friendID)
+	{	
+		Bundle params = new Bundle();
+
+		params.putString("id", friendID);
+		
+		WebDialog friendDialog = (
+				new WebDialog.Builder(context, Session.getActiveSession(), "friends", params))
+        .setOnCompleteListener(new OnCompleteListener()
+        {
+            @Override
+            public void onComplete(Bundle values, FacebookException error)
+            {
+                if(error != null)
+                {
+                    if(error instanceof FacebookOperationCanceledException)
+                    {
+                        Toast.makeText(context, "Friend Request Cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        //Toast.makeText(getApplication().getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else
+                {
+                    final String requestId = values.getString("request");
+                    if (requestId != null)
+                    {
+                        Toast.makeText(context, "Friend Request Sent", Toast.LENGTH_SHORT).show();
+                        
+                        removeFriend();
+                    }
+                    else
+                    {
+                        Toast.makeText(context, "Friend Request Cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                }   
+            }
+
+        })
+        .build();
+		friendDialog.show();
+	}
+	
+	private void removeFriend()
+	{
+		friendsList.remove(entryToRemove);
+		
         DataAccessObject datasource = new DataAccessObject(context);
         datasource.open();
     	
-    	Functions.deleteData(datasource, entry.getFriendID());
+    	Functions.deleteData(datasource, entryToRemove.getFriendID());
     	
         notifyDataSetChanged();
-    }
+        
+        datasource.close();
+	}
 
 }

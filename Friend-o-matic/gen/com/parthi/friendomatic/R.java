@@ -214,6 +214,7 @@ containing a value of this type.
     public static final class id {
         public static final int LinearLayout01=0x7f04002f;
         public static final int TableLayout1=0x7f04001b;
+        public static final int accept=0x7f040031;
         public static final int authButton=0x7f040005;
         public static final int com_facebook_login_activity_progress_bar=0x7f040008;
         public static final int com_facebook_picker_activity_circle=0x7f040007;
@@ -235,10 +236,10 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_logo_image=0x7f040018;
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f040019;
         public static final int contact_button=0x7f04002e;
-        public static final int delete=0x7f040031;
+        public static final int delete=0x7f040032;
         public static final int firstname=0x7f040020;
         public static final int friend=0x7f040030;
-        public static final int friends=0x7f040032;
+        public static final int friends=0x7f040033;
         public static final int friendslist=0x7f040003;
         public static final int home=0x7f040029;
         public static final int large=0x7f040002;
@@ -246,7 +247,7 @@ containing a value of this type.
         public static final int linearLayout1=0x7f04002d;
         public static final int loginmessage=0x7f040004;
         public static final int mobile=0x7f040026;
-        public static final int nfc=0x7f040033;
+        public static final int nfc=0x7f040034;
         public static final int normal=0x7f040001;
         public static final int picker_subtitle=0x7f040017;
         public static final int search_box=0x7f040016;
