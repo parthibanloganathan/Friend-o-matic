@@ -266,10 +266,6 @@ containing a value of this type.
         public static final int textView6=0x7f04002b;
         public static final int work=0x7f04002c;
     }
-    public static final class integer {
-        public static final int tag_accept=0x7f090000;
-        public static final int tag_delete=0x7f090001;
-    }
     public static final class layout {
         public static final int activity_friendslist=0x7f030000;
         public static final int activity_main=0x7f030001;
@@ -290,9 +286,9 @@ containing a value of this type.
         public static final int friend_row=0x7f030010;
     }
     public static final class menu {
-        public static final int menu_friends=0x7f0a0000;
-        public static final int menu_home=0x7f0a0001;
-        public static final int menu_nfc=0x7f0a0002;
+        public static final int menu_friends=0x7f090000;
+        public static final int menu_home=0x7f090001;
+        public static final int menu_nfc=0x7f090002;
     }
     public static final class string {
         public static final int app_id=0x7f05001c;

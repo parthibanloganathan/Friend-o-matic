@@ -27,7 +27,6 @@ public class FriendsAdapter extends BaseAdapter implements OnClickListener
     
     private Data entryToRemove = new Data();
     
-    
     public FriendsAdapter(Context context, List<Data> friendsList)
     {
         this.context = context;
@@ -53,11 +52,11 @@ public class FriendsAdapter extends BaseAdapter implements OnClickListener
     {
         Data entry = friendsList.get(position);
         
-        //if(convertView == null)
-        //{
+        if(convertView == null)
+        {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.friend_row, null);
-        //}
+        }
         
         TextView friendText = (TextView) convertView.findViewById(R.id.friend);
         friendText.setText(entry.getFriendName());
@@ -157,5 +156,4 @@ public class FriendsAdapter extends BaseAdapter implements OnClickListener
         
         datasource.close();
 	}
-
 }

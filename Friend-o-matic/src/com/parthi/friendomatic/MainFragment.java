@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.facebook.Request;
@@ -23,6 +24,8 @@ public class MainFragment extends Fragment
 	private UiLifecycleHelper uiHelper;
 	private TextView userstatus;
 	
+	//private WebView webview;
+	
 	//Database
 	private DataAccessObject datasource;
 	
@@ -31,6 +34,12 @@ public class MainFragment extends Fragment
 	{
 	    View view = inflater.inflate(R.layout.activity_main, container, false);
 
+	    /*
+	    webview = (WebView) view.findViewById(R.id.webview);
+		webview.getSettings().setJavaScriptEnabled(true);
+	    */
+	    
+	    
 	    LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 	    authButton.setFragment(this);
 	  
@@ -61,6 +70,11 @@ public class MainFragment extends Fragment
 	    {
 	        // Get the user's data.
 	        userInfoRequest(session);
+	        
+	        /*webview.loadUrl("http://www.facebook.com/dialog/friends/?"+
+	        		  "id=DerekHe&"+
+	        		  "app_id=551563974854004&"+
+	        		  "redirect_uri=https://www.facebook.com/connect/login_success.html");*/
 	    }
 	    
 	    if(state.isOpened())
@@ -71,7 +85,6 @@ public class MainFragment extends Fragment
 	    	
 	    	User.setUserID(id);
 	    	User.setName(name);
-	        
 	    }
 	    else if(state.isClosed())
 	    {
