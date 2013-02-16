@@ -327,9 +327,9 @@ public class WebDialog extends Dialog {
                 return false;
             }
             // launch non-dialog URLs in a full browser
-            // getContext().startActivity(									//commented this for Friend-o-matic
-            //        new Intent(Intent.ACTION_VIEW, Uri.parse(url)));		//commented this Friend-o-matic
-            return false;													//made this false from true
+            //getContext().startActivity(									//commented this
+            //        new Intent(Intent.ACTION_VIEW, Uri.parse(url)));		//commented this
+            return false;													//changed from true to false
         }
 
         @Override
